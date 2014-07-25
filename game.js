@@ -19,6 +19,7 @@ var
     states = {
         Splash: 0, Game: 1, Score: 2
     },
+    okbtn,
 
     bird = {
 
@@ -88,7 +89,7 @@ var
         _pipes: [],
 
         reset: function(){
-
+            this._pipes = [];
         },
         update: function(){
             if(frames % 100 === 0){
@@ -104,6 +105,10 @@ var
                 var p = this._pipes[i];
 
                 if(i === 0){
+
+                    score+= p.x === bird.x ? 1 : 0;
+
+
                     var cx = Math.min(Math.max(bird.x, p.x), p.x + p.width);
                     var cy1 = Math.min(Math.max(bird.y, p.y), p.y + p.height);
                     var cy2 = Math.min(Math.max(bird.y, p.y+ p.height + 80), p.y + 2 * p.height + 80);
@@ -150,7 +155,18 @@ function onpress(evt){
             bird.jump();
             break;
         case states.Score:
-
+            var mx = evt.offsetX, my = evt.offsetY;
+            if(mx == null || my == null){
+                mx = evt.touches[0].clientX;
+                my = evt.touches[0].clientY;
+            }
+            if(okbtn.x < mx && mx < okbtn.x + okbtn.width&&
+                okbtn.y < my && my < okbtn.y + okbtn.height)
+            {
+                pipes.reset();
+                currentState = states.Splash;
+                score = 0;
+            }
             break;
     }
 }
@@ -159,7 +175,7 @@ function main(){
 
     width = window.innerWidth;
     height = window.innerHeight;
-    var evt = "mousedown";
+    var evt = "touches";
     if (width >= 500){
         width = 320;
         height = 480;
@@ -183,6 +199,13 @@ function main(){
     img.onload = function () {
         initSprites(this);
         ctx.fillStyle = s_bg.color;
+
+        okbtn = {
+            x: (width - s_buttons.Ok.width)/2,
+            y: height-200,
+            width: s_buttons.Ok.width,
+            height: s_buttons.Ok.height
+        }
         run();
     }
     img.src = "res/sheet.png"
@@ -202,6 +225,8 @@ function update(){
 
     if(currentState !== states.Score){
         fgpos = (fgpos - 2) % 14;
+    }else{
+        best = Math.max(best, score);
     }
     if(currentState === states.Game){
         pipes.update();
@@ -225,9 +250,20 @@ function render(){
 
     var width2 =  width/2;
 
-    if(currentState == states.Splash){
+    if(currentState === states.Splash){
         s_splash.draw(ctx, width2 - s_splash.width / 2, height - 300 );
-        s_text.GetReady.draw(ctx, width2 - s_text.GetReady.width/2, height-380);
+        s_text.GetReady.draw(ctx, width2 - s_text.GetReady.width/2, height - 380);
+    }
+
+    if(currentState === states.Score ){
+        s_text.GameOver.draw(ctx, width2 - s_text.GameOver.width/2, height - 400);
+        s_score.draw(ctx, width2 - s_score.width/2, height - 340);
+        s_buttons.Ok.draw(ctx, okbtn.x, okbtn.y);
+
+        s_numberS.draw(ctx, width2 - 47, height - 304, score, null, 10);
+        s_numberS.draw(ctx, width2 - 47, height - 262, best, null, 10);
+    }else{
+        s_numberB.draw(ctx, null, 20, score, width2);
     }
 }
 
