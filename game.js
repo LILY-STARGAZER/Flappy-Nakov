@@ -1,7 +1,7 @@
 /**
  * Created by gondarslol on 7/25/2014.
  */
-
+//creating the variables of the game
 var
 
     canvas,
@@ -20,7 +20,7 @@ var
         Splash: 0, Game: 1, Score: 2
     },
     okbtn,
-
+    //giving the bird start position, animations from the sheet and gravity
     bird = {
 
         x: 60,
@@ -34,11 +34,11 @@ var
         _jump: 4.6,
 
 
-
+//creating the jump function for the bird
         jump: function(){
             this.velocity = -this._jump;
         },
-
+//update function - for initializing the current state + movements
         update: function(){
             var n = currentState === states.Splash ? 10 : 5;
             this.frame += frames % n === 0 ? 1 : 0 ;
@@ -67,6 +67,7 @@ var
                 }
             }
         },
+//drawing the bird onto the ctx
         draw: function(ctx){
 
             ctx.save();
@@ -83,14 +84,15 @@ var
 
         }
     },
-
+//creating pipe physics and spawns
     pipes = {
 
         _pipes: [],
-
+//reset function after game ends
         reset: function(){
             this._pipes = [];
         },
+//refresh function for the pipes + making them appear randomly
         update: function(){
             if(frames % 100 === 0){
                 var _y = height - (s_pipeSouth.height + s_fg.height + 120 + 200*Math.random());
@@ -134,6 +136,7 @@ var
                 }
             }
         },
+//drawing the pipes
         draw: function(ctx){
 
             for (var i = 0, len = this._pipes.length; i < len; i++) {
@@ -144,6 +147,7 @@ var
             }
         }
     };
+//creating the eventlistener
 function onpress(evt){
 
     switch (currentState){
@@ -170,6 +174,7 @@ function onpress(evt){
             break;
     }
 }
+//main function for the game
 function main(){
     canvas = document.createElement("canvas");
 
@@ -210,7 +215,7 @@ function main(){
     }
     img.src = "res/sheet.png"
 }
-
+//run function
 function run(){
     var loop = function(){
         update();
@@ -219,7 +224,7 @@ function run(){
     }
     window.requestAnimationFrame(loop, canvas);
 }
-
+//refresh/update function
 function update(){
     frames++;
 
@@ -235,7 +240,7 @@ function update(){
     bird.update();
 
 }
-
+//rendering(drawing) function
 function render(){
     ctx.fillRect(0, 0, width, height);
     s_bg.draw(ctx, 0, height - s_bg.height);
@@ -267,4 +272,4 @@ function render(){
     }
 }
 
-main();
+main(); // starting the game with it
