@@ -93,7 +93,7 @@ var
                 } else {
                     this.rotation = -0.3;
                 }
-            } else if (currentState === states.Menu) {
+            } else if (currentState === states.Score) {
                 stateMainMenu();
 
             }
@@ -183,8 +183,10 @@ function onpress(evt) {
 
     switch (currentState) {
         case states.Menu:
+            stateMainMenu();
             break;
         case states.Splash:
+            console.log("Splash");
             currentState = states.Game;
             bird.jump();
             break;
@@ -200,7 +202,7 @@ function onpress(evt) {
             if (okbtn.x < mx && mx < okbtn.x + okbtn.width &&
                 okbtn.y < my && my < okbtn.y + okbtn.height) {
                 pipes.reset();
-                currentState = states.Splash;
+                currentState = states.Menu;
                 score = 0;
             }
             break;
@@ -250,7 +252,6 @@ function main() {
 //run function
 function run() {
     var loop = function () {
-        console.log("Looping");
         if (currentState === states.Menu) {
             stateMainMenu();
         } else {
@@ -327,9 +328,8 @@ function stateMainMenu() {
             break;
     }
 
-    console.log(playNewGame);
     if (playNewGame) {
-        currentState = states.Game;
+        currentState = states.Splash;
         run();
         playNewGame = false;
     }
@@ -364,6 +364,7 @@ function mainMenuSelector() {
         switch (selectedOptions) {
             case 0:
                 playNewGame = true;
+                currentState = states.Splash;
                 keyDown = true;
                 break;
             case 1:
