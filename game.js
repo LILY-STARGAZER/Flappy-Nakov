@@ -2,33 +2,8 @@
  * Created by gondarslol on 7/25/2014.
  */
 //creating the variables of the game
-
-//-----------------------------
-//Key Presses                 /
-//-----------------------------
-var keyPressList = [];
-//-----------------------------
-
-//-----------------------------
-//Images               /
-//-----------------------------
-gameBackground = new Image();
-gameBackground.src = "res/gameBackground.jpg";
-//-----------------------------
-
-//-----------------------------
-// Canvas Size                /
-// ----------------------------
-var xMin = 0;
-var xMax = 520;
-var yMin = 0;
-var yMax = 400;
-//-----------------------------
-
-
 var
-    selectedOptions = 0,
-    playNewGame = false,
+
     canvas,
     ctx,
     width,
@@ -45,9 +20,7 @@ var
         Menu: 0, Splash: 1, Game: 2, Score: 3
     },
     okbtn,
-
-
-//giving the bird start position, animations from the sheet and gravity
+    //giving the bird start position, animations from the sheet and gravity
     bird = {
 
         x: 60,
@@ -62,17 +35,17 @@ var
 
 
 //creating the jump function for the bird
-        jump: function () {
+        jump: function(){
             this.velocity = -this._jump;
         },
 //update function - for initializing the current state + movements
-        update: function () {
+        update: function(){
             var n = currentState === states.Splash ? 10 : 5;
-            this.frame += frames % n === 0 ? 1 : 0;
+            this.frame += frames % n === 0 ? 1 : 0 ;
             this.frame %= this.animation.length;
 
-            if (currentState === states.Splash) {
-                this.y = height - 280 + 5 * Math.cos(frames / 10);
+            if (currentState === states.Splash){
+                this.y = height - 280 + 5*Math.cos(frames/10);
                 this.rotation = 0;
             } else if (currentState === states.Game) {
                 this.velocity += this.gravity;
@@ -153,12 +126,12 @@ var
 
                     var r = bird.radius * bird.radius;
 
-                    if (r > d1 || r > d2) {
+                    if(r>d1 || r > d2 || bird.y < -50){
                         currentState = states.Score;
                     }
                 }
                 p.x -= 2;
-                if (p.x < -50) {
+                if(p.x < -50){
                     this._pipes.splice(i, 1);
                     i--;
                     len--;
@@ -166,18 +139,18 @@ var
             }
         },
 //drawing the pipes
-        draw: function (ctx) {
+        draw: function(ctx){
 
             for (var i = 0, len = this._pipes.length; i < len; i++) {
                 var p = this._pipes[i];
                 s_pipeSouth.draw(ctx, p.x, p.y);
-                s_pipeNorth.draw(ctx, p.x, p.y + 80 + p.height);
+                s_pipeNorth.draw(ctx, p.x, p.y+80+ p.height);
 
             }
         }
     };
 //creating the eventlistener
-function onpress(evt) {
+function onpress(evt){
 
     switch (currentState) {
         case states.Menu:
@@ -191,12 +164,13 @@ function onpress(evt) {
             break;
         case states.Score:
             var mx = evt.offsetX, my = evt.offsetY;
-            if (mx == null || my == null) {
+            if(mx == null || my == null){
                 mx = evt.touches[0].clientX;
                 my = evt.touches[0].clientY;
             }
-            if (okbtn.x < mx && mx < okbtn.x + okbtn.width &&
-                okbtn.y < my && my < okbtn.y + okbtn.height) {
+            if(okbtn.x < mx && mx < okbtn.x + okbtn.width&&
+                okbtn.y < my && my < okbtn.y + okbtn.height)
+            {
                 pipes.reset();
                 currentState = states.Splash;
                 score = 0;
@@ -205,13 +179,13 @@ function onpress(evt) {
     }
 }
 //main function for the game
-function main() {
+function main(){
     canvas = document.createElement("canvas");
 
     width = window.innerWidth;
     height = window.innerHeight;
     var evt = "touches";
-    if (width >= 500) {
+    if (width >= 500){
         width = 320;
         height = 480;
         canvas.style.border = "1px black solid";
@@ -236,8 +210,8 @@ function main() {
         ctx.fillStyle = s_bg.color;
 
         okbtn = {
-            x: (width - s_buttons.Ok.width) / 2,
-            y: height - 200,
+            x: (width - s_buttons.Ok.width)/2,
+            y: height-200,
             width: s_buttons.Ok.width,
             height: s_buttons.Ok.height
         }
@@ -260,15 +234,15 @@ function run() {
     window.requestAnimationFrame(loop, canvas);
 }
 //refresh/update function
-function update() {
+function update(){
     frames++;
 
-    if (currentState !== states.Score) {
+    if(currentState !== states.Score){
         fgpos = (fgpos - 2) % 14;
-    } else {
+    }else{
         best = Math.max(best, score);
     }
-    if (currentState === states.Game) {
+    if(currentState === states.Game){
         pipes.update();
     }
 
@@ -276,7 +250,7 @@ function update() {
 
 }
 //rendering(drawing) function
-function render() {
+function render(){
     ctx.fillRect(0, 0, width, height);
     s_bg.draw(ctx, 0, height - s_bg.height);
     s_bg.draw(ctx, s_bg.width, height - s_bg.height);
@@ -285,155 +259,26 @@ function render() {
     bird.draw(ctx);
 
 
-    s_fg.draw(ctx, fgpos, height - s_fg.height);
-    s_fg.draw(ctx, fgpos + s_fg.width, height - s_fg.height);
+    s_fg.draw(ctx, fgpos, height- s_fg.height);
+    s_fg.draw(ctx, fgpos + s_fg.width, height- s_fg.height);
 
-    var width2 = width / 2;
+    var width2 =  width/2;
 
-    if (currentState === states.Splash) {
-        s_splash.draw(ctx, width2 - s_splash.width / 2, height - 300);
-        s_text.GetReady.draw(ctx, width2 - s_text.GetReady.width / 2, height - 380);
+    if(currentState === states.Splash){
+        s_splash.draw(ctx, width2 - s_splash.width / 2, height - 300 );
+        s_text.GetReady.draw(ctx, width2 - s_text.GetReady.width/2, height - 380);
     }
 
-    if (currentState === states.Score) {
-        s_text.GameOver.draw(ctx, width2 - s_text.GameOver.width / 2, height - 400);
-        s_score.draw(ctx, width2 - s_score.width / 2, height - 340);
+    if(currentState === states.Score ){
+        s_text.GameOver.draw(ctx, width2 - s_text.GameOver.width/2, height - 400);
+        s_score.draw(ctx, width2 - s_score.width/2, height - 340);
         s_buttons.Ok.draw(ctx, okbtn.x, okbtn.y);
 
         s_numberS.draw(ctx, width2 - 47, height - 304, score, null, 10);
         s_numberS.draw(ctx, width2 - 47, height - 262, best, null, 10);
-    } else {
+    }else{
         s_numberB.draw(ctx, null, 20, score, width2);
     }
-}
-
-
-function stateMainMenu() {
-    renderGameBackground(0.4);
-    switch (menuNav) {
-        case "Main":
-            mainMenu();
-            break;
-        case "How To Play":
-            howToPlay();
-            break;
-        case "gameOptions":
-            gameOptions();
-            break;
-        case "About":
-            about();
-            break;
-    }
-
-    console.log(playNewGame);
-    if (playNewGame) {
-        currentState = states.Game;
-        run();
-        playNewGame = false;
-    }
-}
-
-
-// ------ GAME MENU -----------
-var menuNav = "Main";
-
-function mainMenuSelector() {
-    if (keyPressList[38] == true) {
-        if (selectedOptions > 0) {
-            selectedOptions--;
-            keyPressList[38] = false;
-        } else if (selectedOptions == 0) {
-            selectedOptions = 3;
-            keyPressList[38] = false;
-        }
-    }
-
-    if (keyPressList[40] == true) {
-        if (selectedOptions < 3) {
-            selectedOptions++;
-            keyPressList[40] = false;
-        } else if (selectedOptions == 3) {
-            selectedOptions = 0;
-            keyPressList[40] = false;
-        }
-    }
-
-    if (keyPressList[13] == true) {
-        switch (selectedOptions) {
-            case 0:
-                playNewGame = true;
-                keyDown = true;
-                break;
-            case 1:
-                menuNav = "gameOptions";
-                selectedOptions = 0;
-                keyPressList[13] = false;
-                break;
-            case 2:
-                menuNav = "How To Play";
-                keyPressList[13] = false;
-                break;
-            case 3:
-                menuNav = "About";
-                keyPressList[13] = false;
-                break;
-        }
-    }
-}
-
-
-function mainMenu() {
-    mainMenuSelector();
-    drawMainMenu();
-}
-
-function drawMainMenu() {
-    var menuOptions = ["New Game", "Options", "How To Play", "About"];
-    var xCoords = [220, 233, 213, 239];
-    var yCoords = [100, 140, 180, 220];
-    for (var i = 0; i < 4; i++) {
-        ctx.save();
-        if (selectedOptions == i)
-            ctx.fillStyle = 'rgb(255,255,255)';
-        else
-            ctx.fillStyle = 'rgb(85,155,130)';
-        ctx.font = '15px red';
-        ctx.textBaseline = 'top';
-        castShadow(0, 0, 'white', 20);
-        ctx.fillText(menuOptions[i], xCoords[i], yCoords[i]);
-        ctx.restore();
-    }
-}
-
-document.onkeydown = function (e) {
-
-    e = e ? e : window.event;
-    keyPressList[e.keyCode] = true;
-    stateMainMenu();
-}
-
-
-document.onkeyup = function (e) {
-    e = e ? e : window.event;
-    keyPressList[e.keyCode] = false;
-    keyDown = false;
-}
-
-function renderGameBackground(backgroundAlpha) {
-    ctx.save();
-    ctx.fillStyle = '#000000';
-    ctx.fillRect(xMin, yMin, xMax, yMax);
-    ctx.globalAlpha = backgroundAlpha;
-    castShadow(0, 0, 'rgb(10,93,85)', 20);
-    ctx.drawImage(gameBackground, 0, 0);
-    ctx.restore();
-}
-
-function castShadow(OffsetX, OffsetY, Color, Blur) {
-    ctx.shadowOffsetX = OffsetX;
-    ctx.shadowOffsetY = OffsetY;
-    ctx.shadowColor = Color;
-    ctx.shadowBlur = Blur;
 }
 
 main(); // starting the game with it

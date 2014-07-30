@@ -29,12 +29,13 @@ Sprite.prototype.draw = function(ctx, x, y) {
 function initSprites(img) {
 
     s_bird = [
-        new Sprite(img, 156, 115, 17, 12),
-        new Sprite(img, 156, 128, 17, 12),
-        new Sprite(img, 156, 141, 17, 12)
+        new Sprite(img, 156, 115, 17, 21),
+        new Sprite(img, 156, 136, 17, 21),
+        new Sprite(img, 156, 115, 17, 21)
+
     ];
 
-    s_bg = new Sprite(img,   0, 0, 138, 114);
+    s_bg = new Sprite(img,   0, 0, 138, 140);
     s_bg.color = "#70C5CF";
     s_fg = new Sprite(img, 138, 0, 112,  56);
 
