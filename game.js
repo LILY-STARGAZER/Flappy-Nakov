@@ -28,6 +28,8 @@ var yMax = 400;
 
 
 var
+    difficulties = ["Easy", "Medium", "Hard"],
+    difficulty = 0,
     selectedOptions = 0,
     playNewGame = false,
     canvas,
@@ -43,7 +45,7 @@ var
 
     currentState,
     states = {
-        Menu: 0, Splash: 1, Game: 2, Score: 3
+        Menu: 0, Splash: 1, Game: 2, Score: 3, OptionsMenu: 4
     },
     okbtn,
 
@@ -254,7 +256,22 @@ function run() {
     var loop = function () {
         if (currentState === states.Menu) {
             stateMainMenu();
-        } else {
+        } else if (currentState === states.OptionsMenu) {
+            gameOptions();
+        }
+        else {
+            switch (difficulty) {
+                case 0:
+                    this.gravity = 0.50;
+                    break;
+                case 1:
+                    this.gravity = 0.75;
+                    break;
+                case 2:
+                    this.gravity = 1.0;
+                    break;
+            }
+
             update();
             render();
             window.requestAnimationFrame(loop, canvas);
@@ -405,6 +422,61 @@ function drawMainMenu() {
         castShadow(0, 0, 'white', 20);
         ctx.fillText(menuOptions[i], xCoords[i], yCoords[i]);
         ctx.restore();
+    }
+}
+
+function gameOptions() {
+    currentState = states.OptionsMenu;
+    gameOptionsMenuSelector();
+    var menuOptions = ["Difficulty_ ", difficulties[difficulty], "Confirm", ""];
+    var xCoords = [193, 287, 213, 285, 228, 0];
+    var yCoords = [120, 120, 160, 160, 200, 0];
+    for (var i = 0; i < 4; i++) {
+        ctx.save();
+        if (selectedOptions == i)
+            ctx.fillStyle = 'rgb(255,255,255)';
+        else
+            ctx.fillStyle = 'rgb(85,155,130)';
+
+        ctx.font = '15px OrbitronLight';
+        ctx.textBaseline = 'top';
+        castShadow(0, 0, 'white', 20);
+        ctx.fillText(menuOptions[i], xCoords[i], yCoords[i]);
+        ctx.restore();
+    }
+}
+
+
+function gameOptionsMenuSelector() {
+    if (keyPressList[38] == true) {
+        if (selectedOptions > 0) {
+            selectedOptions -= 2;
+            keyPressList[38] = false;
+        }
+    }
+
+    if (keyPressList[40] == true) {
+        if (selectedOptions < 4) {
+            selectedOptions += 2;
+            keyPressList[40] = false;
+        }
+    }
+
+    if (keyPressList[13] == true && keyDown == false) {
+        switch (selectedOptions) {
+            case 0:
+                difficulty++;
+                if (difficulty == 3)
+                    difficulty = 0;
+                keyDown = true;
+                break;
+
+            case 2:
+                menuNav = "Main";
+                currentState = states.Menu;
+                selectedOptions = 0;
+                keyPressList[13] = false;
+        }
     }
 }
 
