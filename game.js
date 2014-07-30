@@ -65,6 +65,7 @@ var
                 }else{
                     this.rotation = -0.3;
                 }
+
             }
         },
 //drawing the bird onto the ctx
@@ -124,7 +125,7 @@ var
 
                     var r = bird.radius*bird.radius;
 
-                    if(r>d1 || r > d2){
+                    if(r>d1 || r > d2 || bird.y < -50){
                         currentState = states.Score;
                     }
                 }
