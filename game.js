@@ -30,8 +30,8 @@ var
         radius: 12,
         animation: [0, 1, 2, 1],
         rotation: 0,
-        gravity: 0.25,
-        _jump: 4.6,
+        gravity: 0.15,
+        _jump: 3,
 
 
 //creating the jump function for the bird
