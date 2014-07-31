@@ -10,3 +10,14 @@ display: block;
     left: 0;
     right: 0;
 }
+
+#logo{
+	border: 10px;
+	width: 275px; 
+	height: 150px;
+	 target: _top;
+	 margin-top: 10px;
+}
+#adBanner1{
+	margin-top: 50px;
+}
